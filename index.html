@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diễn đàn Sáng tạo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --text-color: #2d3748;
+            --primary-color: #4299e1;
+            --secondary-color: #ffffff;
+            --accent-color: #ed64a6;
+            --border-color: #e2e8f0;
+            --gradient-1: linear-gradient(135deg, #667eea, #764ba2);
+            --gradient-2: linear-gradient(135deg, #6b46c1, #ff758c);
+            --gradient-3: linear-gradient(135deg, #f6d365, #fda085);
+            --gradient-4: linear-gradient(135deg, #84fab0, #8fd3f4);
+            --gradient-5: linear-gradient(135deg, #a18cd1, #fbc2eb);
+        }
+
+        .dark-mode {
+            --bg-color: #1a202c;
+            --text-color: #e2e8f0;
+            --primary-color: #63b3ed;
+            --secondary-color: #2d3748;
+            --accent-color: #f687b3;
+            --border-color: #4a5568;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .icon-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            transition: transform 0.3s ease;
+        }
+
+        .icon-button:hover {
+            transform: scale(1.1);
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-auto-rows: minmax(200px, auto);
+            gap: 20px;
+        }
+
+        .post {
+            background-color: var(--secondary-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-0 {
+            grid-column: span 2;
+            grid-row: span 2;
+            background-image: var(--gradient-1);
+            color: white;
+        }
+
+        .post-1 {
+            grid-column: span 2;
+            grid-row: span 1;
+            background-image: var(--gradient-2);
+            color: white;
+        }
+
+        .post-2 {
+            grid-column: span 2;
+            grid-row: span 1;
+            background-image: var(--gradient-3);
+        }
+
+        .post-3 {
+            grid-column: span 3;
+            grid-row: span 1;
+            background-image: var(--gradient-4);
+        }
+
+        .post-4 {
+            grid-column: span 3;
+            grid-row: span 1;
+            background-image: var(--gradient-5);
+        }
+
+        .post h3 {
+            margin-top: 0;
+            color: inherit;
+            font-weight: 600;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .post-content {
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: inherit;
+            opacity: 0.8;
+        }
+
+        .create-post-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--accent-color);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            border: none;
+            font-size: 1.5rem;
+        }
+
+        .create-post-btn:hover {
+            background-color: #d53f8c;
+            transform: scale(1.1);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal form {
+            background-color: var(--secondary-color);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-header h2 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-btn:hover {
+            background-color: #3182ce;
+            transform: translateY(-2px);
+        }
+
+        .icon {
+            margin-right: 8px;
+        }
+
+        .like-button {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .like-button:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .post {
+                grid-column: span 1 !important;
+                grid-row: span 1 !important;
+            }
+
+            .modal form {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                <i data-lucide="message-circle" class="icon"></i>
+                Diễn đàn Sáng tạo
+            </h1>
+            <button id="darkModeToggle" class="icon-button">
+                <i data-lucide="moon" class="icon"></i>
+            </button>
+        </header>
+
+        <main id="postsGrid" class="posts-grid">
+            <!-- Posts will be dynamically inserted here -->
+        </main>
+    </div>
+
+    <button id="createPostBtn" class="create-post-btn">
+        <i data-lucide="plus" class="icon"></i>
+    </button>
+
+    <div id="postModal" class="modal" style="display: none;">
+        <form id="postForm">
+            <div class="form-header">
+                <h2>Tạo bài viết mới</h2>
+                <button type="button" class="close-btn" id="closeModal">
+                    <i data-lucide="x" class="icon"></i>
+                </button>
+            </div>
+            <div class="input-group">
+                <label for="name">Tên của bạn</label>
+                <input type="text" id="name" placeholder="Nhập tên của bạn" required>
+            </div>
+            <div class="input-group">
+                <label for="content">Nội dung bài viết</label>
+                <textarea id="content" placeholder="Chia sẻ suy nghĩ của bạn..." required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">
+                <i data-lucide="send" class="icon"></i>
+                Đăng bài
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const API_KEY = '$2a$10$sNM2ggm/zY5RtXwS28GEiOKSEjxJR52rTEJeJSrE72gPE98pyMmC2';
+        const BIN_ID = '677f8020acd3cb34a8c69641';
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+        const postForm = document.getElementById('postForm');
+        const postsGrid = document.getElementById('postsGrid');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const createPostBtn = document.getElementById('createPostBtn');
+        const postModal = document.getElementById('postModal');
+        const closeModal = document.getElementById('closeModal');
+
+        function formatTime(date) {
+            const now = new Date();
+            const diff = now - date;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (days > 0) return `${days} ngày trước`;
+            if (hours > 0) return `${hours} giờ trước`;
+            if (minutes > 0) return `${minutes} phút trước`;
+            return 'Vừa xong';
+        }
+
+        async function fetchPosts() {
+            try {
+                const response = await fetch(API_URL, {
+                    headers: {
+                        'X-Master-Key': API_KEY
+                    }
+                });
+                const data = await response.json();
+                return data.record.posts || [];
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+                return [];
+            }
+        }
+
+        async function savePosts(posts) {
+            try {
+                await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify({ posts })
+                });
+            } catch (error) {
+                console.error('Error saving posts:', error);
+            }
+        }
+
+        async function renderPosts() {
+            const posts = await fetchPosts();
+            postsGrid.innerHTML = posts.map((post, index) => `
+                <div class="post post-${index % 5}">
+                    <h3>
+                        <i data-lucide="user" class="icon"></i>
+                        ${post.name}
+                    </h3>
+                    <div class="post-content">
+                        <p>${post.content}</p>
+                    </div>
+                    <div class="post-meta">
+                        <span>
+                            <i data-lucide="clock" class="icon"></i>
+                            ${formatTime(new Date(post.date))}
+                        </span>
+                        <button class="like-button" onclick="likePost('${post.id}')">
+                            <i data-lucide="heart" class="icon"></i>
+                            ${post.likes || 0} thích
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        async function likePost(id) {
+            const posts = await fetchPosts();
+            const updatedPosts = posts.map(post =>
+                post.id === id ? { ...post, likes: (post.likes || 0) + 1 } : post
+            );
+            await savePosts(updatedPosts);
+            await renderPosts();
+        }
+
+        postForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const content = document.getElementById('content').value;
+
+            const newPost = {
+                id: Date.now().toString(),
+                name,
+                content,
+                date: new Date().toISOString(),
+                likes: 0
+            };
+
+            const posts = await fetchPosts();
+            posts.unshift(newPost);
+            await savePosts(posts);
+            await renderPosts();
+
+            postForm.reset();
+            postModal.style.display = 'none';
+        });
+
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const moonIcon = darkModeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                moonIcon.setAttribute('data-lucide', 'sun');
+            } else {
+                moonIcon.setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+        });
+
+        createPostBtn.addEventListener('click', function() {
+            postModal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', function() {
+            postModal.style.display = 'none';
+        });
+
+        postModal.addEventListener('click', function(e) {
+            if (e.target === postModal) {
+                postModal.style.display = 'none';
+            }
+        });
+
+        renderPosts();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
