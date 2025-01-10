@@ -339,7 +339,7 @@
         newPostBtn.addEventListener('click', () => {
             newPostForm.classList.toggle('hidden');
             newPostBtn.innerHTML = newPostForm.classList.contains('hidden')
-                ? '<i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>Đăng Bài Mới'
+                ? '<i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>Đăng Bài'
                 : '<i data-lucide="x-circle" class="w-5 h-5 mr-2"></i>Đóng';
             lucide.createIcons();
         });
@@ -582,7 +582,7 @@
 
             postForm.reset();
             newPostForm.classList.add('hidden');
-            newPostBtn.innerHTML = '<i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>Đăng Bài Mới';
+            newPostBtn.innerHTML = '<i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>Đăng Bàis';
             lucide.createIcons();
         });
 
