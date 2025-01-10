@@ -1,368 +1,160 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diễn đàn Sáng tạo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Sáng Tạo Cộng Đồng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #f0f4f8;
-            --text-color: #2d3748;
-            --primary-color: #4299e1;
-            --secondary-color: #ffffff;
-            --accent-color: #ed64a6;
-            --border-color: #e2e8f0;
-            --gradient-1: linear-gradient(135deg, #667eea, #764ba2);
-            --gradient-2: linear-gradient(135deg, #6b46c1, #ff758c);
-            --gradient-3: linear-gradient(135deg, #f6d365, #fda085);
-            --gradient-4: linear-gradient(135deg, #84fab0, #8fd3f4);
-            --gradient-5: linear-gradient(135deg, #a18cd1, #fbc2eb);
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
-
-        .dark-mode {
-            --bg-color: #1a202c;
-            --text-color: #e2e8f0;
-            --primary-color: #63b3ed;
-            --secondary-color: #2d3748;
-            --accent-color: #f687b3;
-            --border-color: #4a5568;
+        .float { animation: float 3s ease-in-out infinite; }
+        .clip-path-slant {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
         }
-
-        body {
-            font-family: 'Quicksand', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.3s ease;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr 3fr;
-            gap: 30px;
-        }
-
-        header {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background-color: var(--secondary-color);
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            color: var(--primary-color);
-            font-weight: 700;
-            font-size: 2.5rem;
-            margin: 0;
-            display: flex;
-            align-items: center;
-        }
-
-        .icon-button {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: var(--text-color);
-            transition: transform 0.3s ease;
-        }
-
-        .icon-button:hover {
-            transform: scale(1.1);
-        }
-
-        .sidebar {
-            background-color: var(--secondary-color);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .posts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .post {
-            background-color: var(--secondary-color);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .post:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .post-0 { background-image: var(--gradient-1); color: white; }
-        .post-1 { background-image: var(--gradient-2); color: white; }
-        .post-2 { background-image: var(--gradient-3); }
-        .post-3 { background-image: var(--gradient-4); }
-        .post-4 { background-image: var(--gradient-5); }
-
-        .post h3 {
-            margin-top: 0;
-            color: inherit;
-            font-weight: 600;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .post-content {
-            flex-grow: 1;
-            margin-bottom: 15px;
-        }
-
-        .post-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
-            color: inherit;
-            opacity: 0.8;
-        }
-
-        .create-post-btn {
-            background-color: var(--accent-color);
-            color: white;
-            width: 100%;
-            padding: 12px;
+        .expanded-post {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            background-color: white;
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            border: none;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
-
-        .create-post-btn:hover {
-            background-color: #d53f8c;
-            transform: translateY(-2px);
-        }
-
-        .modal {
+        .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal form {
-            background-color: var(--secondary-color);
-            border-radius: 15px;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .form-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .form-header h2 {
-            color: var(--primary-color);
-            margin: 0;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Quicksand', sans-serif;
-            font-size: 1rem;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-        }
-
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .submit-btn {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 600;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .submit-btn:hover {
-            background-color: #3182ce;
-            transform: translateY(-2px);
-        }
-
-        .icon {
-            margin-right: 8px;
-        }
-
-        .like-button {
-            background: none;
-            border: none;
-            color: inherit;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            font-size: 0.9rem;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-
-        .like-button:hover {
-            opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            .posts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .modal form {
-                width: 95%;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
+            z-index: 999;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>
-                <i data-lucide="message-circle" class="icon"></i>
-                Diễn đàn Sáng tạo
+<body class="bg-gradient-to-br from-purple-100 to-blue-200 min-h-full flex flex-col font-['Montserrat']">
+    <header class="bg-white bg-opacity-80 backdrop-blur-md sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500 flex items-center">
+                <i data-lucide="lightbulb" class="w-8 h-8 mr-2 text-purple-600"></i>
+                Forum
             </h1>
-            <button id="darkModeToggle" class="icon-button">
-                <i data-lucide="moon" class="icon"></i>
+            <button id="newPostBtn" class="bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 shadow-md flex items-center">
+                <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>
+                Đăng Bài Mới
             </button>
-        </header>
+        </div>
+    </header>
 
-        <aside class="sidebar">
-            <button id="createPostBtn" class="create-post-btn">
-                <i data-lucide="plus" class="icon"></i>
-                Tạo bài viết mới
-            </button>
-            <h2>Thống kê</h2>
-            <p>Tổng số bài viết: <span id="postCount">0</span></p>
-            <p>Tổng số lượt thích: <span id="likeCount">0</span></p>
-        </aside>
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div id="newPostForm" class="hidden mb-8">
+            <div class="bg-white rounded-lg shadow-xl p-6 transform transition-all duration-300 ease-in-out">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800 flex items-center">
+                    <i data-lucide="edit-3" class="w-6 h-6 mr-2 text-purple-500"></i>
+                    Chia sẻ ý tưởng của bạn
+                </h2>
+                <form id="postForm">
+                    <div class="mb-4 relative">
+                        <i data-lucide="user" class="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="name" placeholder="Tên của bạn" required
+                               class="w-full px-10 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300">
+                    </div>
+                    <div class="mb-4 relative">
+                        <i data-lucide="message-square" class="w-5 h-5 absolute left-3 top-3 text-gray-400"></i>
+                        <textarea id="content" placeholder="Chia sẻ suy nghĩ của bạn..." required
+                                  class="w-full px-10 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300 min-h-[120px]"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 transform hover:scale-105 hover:from-purple-600 hover:to-blue-600 shadow-md flex items-center justify-center">
+                        <i data-lucide="send" class="w-5 h-5 mr-2"></i>
+                        Đăng Bài
+                    </button>
+                </form>
+            </div>
+        </div>
 
-        <main id="postsGrid" class="posts-grid">
+        <div id="postsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Posts will be dynamically inserted here -->
-        </main>
+        </div>
+    </main>
+
+    <div id="expandedPostContainer" class="hidden">
+        <div class="overlay"></div>
+        <div class="expanded-post p-6">
+            <button id="closeExpandedPost" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 id="expandedPostTitle" class="text-2xl font-semibold mb-2 text-gray-800"></h3>
+            <p id="expandedPostContent" class="text-gray-600 mb-4"></p>
+            <div class="flex justify-between items-center text-sm text-gray-500 mb-4">
+                <span id="expandedPostDate" class="flex items-center">
+                    <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+                </span>
+                <div class="flex items-center space-x-4">
+                    <button id="expandedPostLike" class="flex items-center space-x-1 text-purple-500 hover:text-purple-700 transition-colors duration-300">
+                        <i data-lucide="heart" class="w-5 h-5"></i>
+                        <span></span>
+                    </button>
+                    <button id="expandedPostShare" class="flex items-center space-x-1 text-blue-500 hover:text-blue-700 transition-colors duration-300">
+                        <i data-lucide="share-2" class="w-5 h-5"></i>
+                        <span>Chia sẻ</span>
+                    </button>
+                </div>
+            </div>
+            <div class="border-t pt-4">
+                <h4 class="text-lg font-semibold mb-2">Bình luận</h4>
+                <form id="commentForm" class="mb-4">
+                    <textarea id="commentContent" placeholder="Viết bình luận của bạn..." required
+                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300 min-h-[80px]"></textarea>
+                    <button type="submit" class="mt-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 transform hover:scale-105 hover:from-purple-600 hover:to-blue-600 shadow-md">
+                        Đăng bình luận
+                    </button>
+                </form>
+                <div id="commentsContainer"></div>
+            </div>
+        </div>
     </div>
 
-    <div id="postModal" class="modal" style="display: none;">
-        <form id="postForm">
-            <div class="form-header">
-                <h2>Tạo bài viết mới</h2>
-                <button type="button" class="close-btn" id="closeModal">
-                    <i data-lucide="x" class="icon"></i>
-                </button>
-            </div>
-            <div class="input-group">
-                <label for="name">Tên của bạn</label>
-                <input type="text" id="name" placeholder="Nhập tên của bạn" required>
-            </div>
-            <div class="input-group">
-                <label for="content">Nội dung bài viết</label>
-                <textarea id="content" placeholder="Chia sẻ suy nghĩ của bạn..." required></textarea>
-            </div>
-            <button type="submit" class="submit-btn">
-                <i data-lucide="send" class="icon"></i>
-                Đăng bài
-            </button>
-        </form>
-    </div>
+    <footer class="bg-white bg-opacity-80 backdrop-blur-md shadow-lg mt-8">
+        <div class="container mx-auto px-4 py-6 text-center text-gray-600 flex items-center justify-center">
+            <i data-lucide="copyright" class="w-4 h-4 mr-2"></i>
+            2025 | tanbaycu & friends
+        </div>
+    </footer>
 
     <script>
         const API_KEY = '$2a$10$sNM2ggm/zY5RtXwS28GEiOKSEjxJR52rTEJeJSrE72gPE98pyMmC2';
         const BIN_ID = '677f8020acd3cb34a8c69641';
         const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
+        const newPostBtn = document.getElementById('newPostBtn');
+        const newPostForm = document.getElementById('newPostForm');
         const postForm = document.getElementById('postForm');
-        const postsGrid = document.getElementById('postsGrid');
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const createPostBtn = document.getElementById('createPostBtn');
-        const postModal = document.getElementById('postModal');
-        const closeModal = document.getElementById('closeModal');
-        const postCountElement = document.getElementById('postCount');
-        const likeCountElement = document.getElementById('likeCount');
+        const postsContainer = document.getElementById('postsContainer');
+        const expandedPostContainer = document.getElementById('expandedPostContainer');
+        const closeExpandedPost = document.getElementById('closeExpandedPost');
+        const expandedPostLike = document.getElementById('expandedPostLike');
+        const expandedPostShare = document.getElementById('expandedPostShare');
+        const commentForm = document.getElementById('commentForm');
+
+        let currentExpandedPost = null;
+
+        newPostBtn.addEventListener('click', () => {
+            newPostForm.classList.toggle('hidden');
+            newPostBtn.innerHTML = newPostForm.classList.contains('hidden') 
+                ? '<i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>Đăng Bài Mới'
+                : '<i data-lucide="x-circle" class="w-5 h-5 mr-2"></i>Đóng';
+            lucide.createIcons();
+        });
 
         function formatTime(date) {
             const now = new Date();
@@ -381,9 +173,7 @@
         async function fetchPosts() {
             try {
                 const response = await fetch(API_URL, {
-                    headers: {
-                        'X-Master-Key': API_KEY
-                    }
+                    headers: { 'X-Master-Key': API_KEY }
                 });
                 const data = await response.json();
                 return data.record.posts || [];
@@ -410,47 +200,125 @@
 
         async function renderPosts() {
             const posts = await fetchPosts();
-            postsGrid.innerHTML = posts.map((post, index) => `
-                <div class="post post-${index % 5}">
-                    <h3>
-                        <i data-lucide="user" class="icon"></i>
+            postsContainer.innerHTML = posts.map((post, index) => `
+                <article class="bg-white rounded-lg shadow-xl p-6 transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl ${index % 2 === 0 ? 'clip-path-slant' : ''}" data-post-id="${post.id}">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800 flex items-center">
+                        <i data-lucide="user" class="w-5 h-5 mr-2 text-purple-500"></i>
                         ${post.name}
                     </h3>
-                    <div class="post-content">
-                        <p>${post.content}</p>
-                    </div>
-                    <div class="post-meta">
-                        <span>
-                            <i data-lucide="clock" class="icon"></i>
+                    <p class="text-gray-600 mb-4">${post.content.length > 100 ? post.content.slice(0, 100) + '...' : post.content}</p>
+                    <div class="flex justify-between items-center text-sm text-gray-500">
+                        <span class="flex items-center">
+                            <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
                             ${formatTime(new Date(post.date))}
                         </span>
-                        <button class="like-button" onclick="likePost('${post.id}')">
-                            <i data-lucide="heart" class="icon"></i>
-                            ${post.likes || 0} thích
-                        </button>
+                        <div class="flex items-center space-x-4">
+                            <button onclick="likePost('${post.id}', event)" class="flex items-center space-x-1 text-purple-500 hover:text-purple-700 transition-colors duration-300" aria-label="Thích bài viết">
+                                <i data-lucide="heart" class="w-5 h-5"></i>
+                                <span>${post.likes || 0}</span>
+                            </button>
+                            <span class="flex items-center space-x-1 text-blue-500">
+                                <i data-lucide="message-square" class="w-5 h-5"></i>
+                                <span>${post.comments ? post.comments.length : 0}</span>
+                            </span>
+                        </div>
                     </div>
-                </div>
+                </article>
             `).join('');
-
             lucide.createIcons();
-            updateStats(posts);
+            
+            document.querySelectorAll('#postsContainer > article').forEach(post => {
+                post.addEventListener('click', () => expandPost(post.dataset.postId));
+            });
         }
 
-        function updateStats(posts) {
-            const totalPosts = posts.length;
-            const totalLikes = posts.reduce((sum, post) => sum + (post.likes || 0), 0);
-            postCountElement.textContent = totalPosts;
-            likeCountElement.textContent = totalLikes;
-        }
-
-        async function likePost(id) {
+        async function likePost(id, event) {
+            if (event) {
+                event.stopPropagation();
+            }
             const posts = await fetchPosts();
             const updatedPosts = posts.map(post =>
                 post.id === id ? { ...post, likes: (post.likes || 0) + 1 } : post
             );
             await savePosts(updatedPosts);
             await renderPosts();
+            if (currentExpandedPost && currentExpandedPost.id === id) {
+                expandPost(id);
+            }
         }
+
+        async function expandPost(postId) {
+            const posts = await fetchPosts();
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            currentExpandedPost = post;
+
+            document.getElementById('expandedPostTitle').textContent = post.name;
+            document.getElementById('expandedPostContent').textContent = post.content;
+            document.getElementById('expandedPostDate').innerHTML = `
+                <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+                ${formatTime(new Date(post.date))}
+            `;
+            document.getElementById('expandedPostLike').querySelector('span').textContent = post.likes || 0;
+            expandedPostContainer.classList.remove('hidden');
+
+            renderComments(post.comments || []);
+            lucide.createIcons();
+        }
+
+        function renderComments(comments) {
+            const commentsContainer = document.getElementById('commentsContainer');
+            commentsContainer.innerHTML = comments.map(comment => `
+                <div class="bg-gray-100 rounded-lg p-3 mb-2">
+                    <p class="text-gray-800">${comment.content}</p>
+                    <p class="text-xs text-gray-500 mt-1">${formatTime(new Date(comment.date))}</p>
+                </div>
+            `).join('');
+        }
+
+        closeExpandedPost.addEventListener('click', () => {
+            expandedPostContainer.classList.add('hidden');
+            currentExpandedPost = null;
+        });
+
+        expandedPostLike.addEventListener('click', async () => {
+            if (!currentExpandedPost) return;
+            await likePost(currentExpandedPost.id);
+            const posts = await fetchPosts();
+            const updatedPost = posts.find(p => p.id === currentExpandedPost.id);
+            expandedPostLike.querySelector('span').textContent = updatedPost.likes || 0;
+        });
+
+        expandedPostShare.addEventListener('click', () => {
+            if (!currentExpandedPost) return;
+            const postUrl = `${window.location.origin}${window.location.pathname}?post=${currentExpandedPost.id}`;
+            navigator.clipboard.writeText(postUrl).then(() => {
+                alert('Đường dẫn bài viết đã được sao chép vào clipboard!');
+            });
+        });
+
+        commentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentExpandedPost) return;
+
+            const commentContent = document.getElementById('commentContent').value;
+            const newComment = {
+                content: commentContent,
+                date: new Date().toISOString()
+            };
+
+            const posts = await fetchPosts();
+            const postIndex = posts.findIndex(p => p.id === currentExpandedPost.id);
+            if (postIndex === -1) return;
+
+            posts[postIndex].comments = posts[postIndex].comments || [];
+            posts[postIndex].comments.unshift(newComment);
+
+            await savePosts(posts);
+            renderComments(posts[postIndex].comments);
+            document.getElementById('commentContent').value = '';
+        });
 
         postForm.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -462,7 +330,8 @@
                 name,
                 content,
                 date: new Date().toISOString(),
-                likes: 0
+                likes: 0,
+                comments: []
             };
 
             const posts = await fetchPosts();
@@ -471,42 +340,37 @@
             await renderPosts();
 
             postForm.reset();
-            postModal.style.display = 'none';
-        });
-
-        darkModeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            const moonIcon = darkModeToggle.querySelector('i');
-            if (document.body.classList.contains('dark-mode')) {
-                moonIcon.setAttribute('data-lucide', 'sun');
-            } else {
-                moonIcon.setAttribute('data-lucide', 'moon');
-            }
+            newPostForm.classList.add('hidden');
+            newPostBtn.innerHTML = '<i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>Đăng Bài Mới';
             lucide.createIcons();
         });
 
-        createPostBtn.addEventListener('click', function() {
-            postModal.style.display = 'flex';
-        });
-
-        closeModal.addEventListener('click', function() {
-            postModal.style.display = 'none';
-        });
-
-        postModal.addEventListener('click', function(e) {
-            if (e.target === postModal) {
-                postModal.style.display = 'none';
+        window.addEventListener('load', async () => {
+            await renderPosts();
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('post');
+            if (postId) {
+                expandPost(postId);
             }
         });
 
-        // Auto-refresh posts every 30 seconds
-        function autoRefresh() {
-            renderPosts();
-            setTimeout(autoRefresh, 30000);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('float');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        function observePosts() {
+            document.querySelectorAll('#postsContainer > article').forEach(post => {
+                observer.observe(post);
+            });
         }
 
-        renderPosts();
-        autoRefresh();
+        renderPosts().then(observePosts);
+
         lucide.createIcons();
     </script>
 </body>
