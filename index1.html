@@ -1,24 +1,91 @@
 <!DOCTYPE html>
 <html lang="vi" class="h-full">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sáng Tạo Cộng Đồng</title>
+    <title>Diễn Đàn - Nơi Chia Sẻ Ý Tưởng và Kết Nối Cộng Đồng</title>
+    <meta name="description"
+        content="Diễn đàn là nơi chia sẻ ý tưởng, kết nối cộng đồng và thảo luận về các chủ đề đa dạng. Tham gia ngay để chia sẻ và học hỏi từ cộng đồng.">
+    <meta name="keywords" content="diễn đàn, forum, cộng đồng, chia sẻ, thảo luận, học hỏi">
+    <meta name="author" content="tanbaycu & friends">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://diendan.vercel.app">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/fy0qcFKb/Thi-t-k-ch-a-c-t-n-9.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://diendan.vercel.app">
+    <meta property="og:title" content="Diễn Đàn - Nơi Chia Sẻ Ý Tưởng và Kết Nối Cộng Đồng">
+    <meta property="og:description"
+        content="Diễn đàn là nơi chia sẻ ý tưởng, kết nối cộng đồng và thảo luận về các chủ đề đa dạng. Tham gia ngay để chia sẻ và học hỏi từ cộng đồng.">
+    <meta property="og:image" content="https://i.postimg.cc/fy0qcFKb/Thi-t-k-ch-a-c-t-n-9.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://diendan.vercel.app">
+    <meta name="twitter:title" content="Diễn Đàn - Nơi Chia Sẻ Ý Tưởng và Kết Nối Cộng Đồng">
+    <meta name="twitter:description"
+        content="Diễn đàn là nơi chia sẻ ý tưởng, kết nối cộng đồng và thảo luận về các chủ đề đa dạng. Tham gia ngay để chia sẻ và học hỏi từ cộng đồng.">
+    <meta name="twitter:image" content="https://i.postimg.cc/fy0qcFKb/Thi-t-k-ch-a-c-t-n-9.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "DiscussionForumPosting",
+      "name": "Diễn Đàn - Nơi Chia Sẻ Ý Tưởng và Kết Nối Cộng Đồng",
+      "description": "Diễn đàn là nơi chia sẻ ý tưởng, kết nối cộng đồng và thảo luận về các chủ đề đa dạng.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Diễn Đàn",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://i.postimg.cc/fy0qcFKb/Thi-t-k-ch-a-c-t-n-9.png"
+        }
+      },
+      "url": "https://diendan.vercel.app",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://i.postimg.cc/fy0qcFKb/Thi-t-k-ch-a-c-t-n-9.png",
+        "width": "1200",
+        "height": "630"
+      }
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://i.postimg.cc/fy0qcFKb/Thi-t-k-ch-a-c-t-n-9.png" type="image/png">
-</head>
     <style>
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
-        .float { animation: float 3s ease-in-out infinite; }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
         .clip-path-slant {
             clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
         }
+
         .expanded-post {
             position: fixed;
             top: 50%;
@@ -33,6 +100,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
+
         .overlay {
             position: fixed;
             top: 0;
@@ -42,18 +110,126 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .pagination button {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            color: #374151;
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover {
+            background-color: #e5e7eb;
+        }
+
+        .pagination button.active {
+            background-color: #8b5cf6;
+            color: white;
+            border-color: #8b5cf6;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .glass-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            padding: 10px 24px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .glass-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(115deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.3),
+                    transparent);
+            transition: 0.5s;
+        }
+
+        .glass-button::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(112deg, #8b5cf6, #3b82f6, #8b5cf6);
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        .glass-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .glass-button:hover::before {
+            left: 100%;
+        }
+
+        .glass-button .icon {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-button:hover .icon {
+            transform: rotate(180deg);
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
     </style>
 </head>
+
 <body class="bg-gradient-to-br from-purple-100 to-blue-200 min-h-full flex flex-col font-['Montserrat']">
     <header class="bg-white bg-opacity-80 backdrop-blur-md sticky top-0 z-50 shadow-lg">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500 flex items-center">
-                <i data-lucide="lightbulb" class="w-8 h-8 mr-2 text-purple-600"></i>
+            <h1
+                class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500 flex items-center">
+                <img src="https://i.postimg.cc/fy0qcFKb/Thi-t-k-ch-a-c-t-n-9.png" alt="Logo Diễn Đàn"
+                    class="w-8 h-8 mr-2" width="32" height="32">
                 Forum
             </h1>
-            <button id="newPostBtn" class="bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 shadow-md flex items-center">
-                <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>
-                Đăng Bài Mới
+            <button id="newPostBtn" class="glass-button">
+                <i data-lucide="plus-circle" class="icon" aria-hidden="true"></i>
+                <span>Đăng Bài</span>
             </button>
         </div>
     </header>
@@ -63,20 +239,22 @@
             <div class="bg-white rounded-lg shadow-xl p-6 transform transition-all duration-300 ease-in-out">
                 <h2 class="text-2xl font-semibold mb-4 text-gray-800 flex items-center">
                     <i data-lucide="edit-3" class="w-6 h-6 mr-2 text-purple-500"></i>
-                    Chia sẻ ý tưởng của bạn
+                    Ý tưởng của bạn
                 </h2>
                 <form id="postForm">
                     <div class="mb-4 relative">
-                        <i data-lucide="user" class="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <i data-lucide="user"
+                            class="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                         <input type="text" id="name" placeholder="Tên của bạn" required
-                               class="w-full px-10 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300">
+                            class="w-full px-10 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300">
                     </div>
                     <div class="mb-4 relative">
                         <i data-lucide="message-square" class="w-5 h-5 absolute left-3 top-3 text-gray-400"></i>
                         <textarea id="content" placeholder="Chia sẻ suy nghĩ của bạn..." required
-                                  class="w-full px-10 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300 min-h-[120px]"></textarea>
+                            class="w-full px-10 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300 min-h-[120px]"></textarea>
                     </div>
-                    <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 transform hover:scale-105 hover:from-purple-600 hover:to-blue-600 shadow-md flex items-center justify-center">
+                    <button type="submit"
+                        class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 transform hover:scale-105 hover:from-purple-600 hover:to-blue-600 shadow-md flex items-center justify-center">
                         <i data-lucide="send" class="w-5 h-5 mr-2"></i>
                         Đăng Bài
                     </button>
@@ -87,6 +265,8 @@
         <div id="postsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Posts will be dynamically inserted here -->
         </div>
+
+        <div id="paginationContainer" class="pagination"></div>
     </main>
 
     <div id="expandedPostContainer" class="hidden">
@@ -102,11 +282,13 @@
                     <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
                 </span>
                 <div class="flex items-center space-x-4">
-                    <button id="expandedPostLike" class="flex items-center space-x-1 text-purple-500 hover:text-purple-700 transition-colors duration-300">
+                    <button id="expandedPostLike"
+                        class="flex items-center space-x-1 text-purple-500 hover:text-purple-700 transition-colors duration-300">
                         <i data-lucide="heart" class="w-5 h-5"></i>
                         <span></span>
                     </button>
-                    <button id="expandedPostShare" class="flex items-center space-x-1 text-blue-500 hover:text-blue-700 transition-colors duration-300">
+                    <button id="expandedPostShare"
+                        class="flex items-center space-x-1 text-blue-500 hover:text-blue-700 transition-colors duration-300">
                         <i data-lucide="share-2" class="w-5 h-5"></i>
                         <span>Chia sẻ</span>
                     </button>
@@ -116,8 +298,9 @@
                 <h4 class="text-lg font-semibold mb-2">Bình luận</h4>
                 <form id="commentForm" class="mb-4">
                     <textarea id="commentContent" placeholder="Viết bình luận của bạn..." required
-                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300 min-h-[80px]"></textarea>
-                    <button type="submit" class="mt-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 transform hover:scale-105 hover:from-purple-600 hover:to-blue-600 shadow-md">
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300 min-h-[80px]"></textarea>
+                    <button type="submit"
+                        class="mt-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 transform hover:scale-105 hover:from-purple-600 hover:to-blue-600 shadow-md">
                         Đăng bình luận
                     </button>
                 </form>
@@ -129,7 +312,7 @@
     <footer class="bg-white bg-opacity-80 backdrop-blur-md shadow-lg mt-8">
         <div class="container mx-auto px-4 py-6 text-center text-gray-600 flex items-center justify-center">
             <i data-lucide="copyright" class="w-4 h-4 mr-2"></i>
-            2025 | tanbaycu & friends
+            2025 | tanbaycu & clotupic
         </div>
     </footer>
 
@@ -149,11 +332,14 @@
         const commentForm = document.getElementById('commentForm');
 
         let currentExpandedPost = null;
+        let currentPage = 1;
+        const postsPerPage = 12;
+        const maxVisiblePages = 5;
 
         newPostBtn.addEventListener('click', () => {
             newPostForm.classList.toggle('hidden');
-            newPostBtn.innerHTML = newPostForm.classList.contains('hidden') 
-                ? '<i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>Đăng Bài Mới'
+            newPostBtn.innerHTML = newPostForm.classList.contains('hidden')
+                ? '<i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>Đăng Bài'
                 : '<i data-lucide="x-circle" class="w-5 h-5 mr-2"></i>Đóng';
             lucide.createIcons();
         });
@@ -201,8 +387,13 @@
         }
 
         async function renderPosts() {
-            const posts = await fetchPosts();
-            postsContainer.innerHTML = posts.map((post, index) => `
+            const allPosts = await fetchPosts();
+            const totalPages = Math.ceil(allPosts.length / postsPerPage);
+            const startIndex = (currentPage - 1) * postsPerPage;
+            const endIndex = startIndex + postsPerPage;
+            const postsToShow = allPosts.slice(startIndex, endIndex);
+
+            postsContainer.innerHTML = postsToShow.map((post, index) => `
                 <article class="bg-white rounded-lg shadow-xl p-6 transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl ${index % 2 === 0 ? 'clip-path-slant' : ''}" data-post-id="${post.id}">
                     <h3 class="text-xl font-semibold mb-2 text-gray-800 flex items-center">
                         <i data-lucide="user" class="w-5 h-5 mr-2 text-purple-500"></i>
@@ -228,10 +419,57 @@
                 </article>
             `).join('');
             lucide.createIcons();
-            
+
             document.querySelectorAll('#postsContainer > article').forEach(post => {
                 post.addEventListener('click', () => expandPost(post.dataset.postId));
             });
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const paginationContainer = document.getElementById('paginationContainer');
+            paginationContainer.innerHTML = '';
+
+            const prevButton = document.createElement('button');
+            prevButton.textContent = 'Trước';
+            prevButton.disabled = currentPage === 1;
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderPosts();
+                }
+            });
+            paginationContainer.appendChild(prevButton);
+
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.classList.toggle('active', i === currentPage);
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    renderPosts();
+                });
+                paginationContainer.appendChild(button);
+            }
+
+            const nextButton = document.createElement('button');
+            nextButton.textContent = 'Sau';
+            nextButton.disabled = currentPage === totalPages;
+            nextButton.addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderPosts();
+                }
+            });
+            paginationContainer.appendChild(nextButton);
         }
 
         async function likePost(id, event) {
@@ -322,7 +560,7 @@
             document.getElementById('commentContent').value = '';
         });
 
-        postForm.addEventListener('submit', async function(e) {
+        postForm.addEventListener('submit', async function (e) {
             e.preventDefault();
             const name = document.getElementById('name').value;
             const content = document.getElementById('content').value;
@@ -339,11 +577,12 @@
             const posts = await fetchPosts();
             posts.unshift(newPost);
             await savePosts(posts);
+            currentPage = 1; // Reset to first page when adding a new post
             await renderPosts();
 
             postForm.reset();
             newPostForm.classList.add('hidden');
-            newPostBtn.innerHTML = '<i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>Đăng Bài Mới';
+            newPostBtn.innerHTML = '<i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>Đăng Bài';
             lucide.createIcons();
         });
 
@@ -376,4 +615,5 @@
         lucide.createIcons();
     </script>
 </body>
+
 </html>
