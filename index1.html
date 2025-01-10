@@ -19,6 +19,29 @@
         .clip-path-slant {
             clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
         }
+        .expanded-post {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-purple-100 to-blue-200 min-h-full flex flex-col font-['Montserrat']">
@@ -30,7 +53,7 @@
             </h1>
             <button id="newPostBtn" class="bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 shadow-md flex items-center">
                 <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>
-                NewPost
+                Đăng Bài Mới
             </button>
         </div>
     </header>
@@ -66,6 +89,43 @@
         </div>
     </main>
 
+    <div id="expandedPostContainer" class="hidden">
+        <div class="overlay"></div>
+        <div class="expanded-post p-6">
+            <button id="closeExpandedPost" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 id="expandedPostTitle" class="text-2xl font-semibold mb-2 text-gray-800"></h3>
+            <p id="expandedPostContent" class="text-gray-600 mb-4"></p>
+            <div class="flex justify-between items-center text-sm text-gray-500 mb-4">
+                <span id="expandedPostDate" class="flex items-center">
+                    <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+                </span>
+                <div class="flex items-center space-x-4">
+                    <button id="expandedPostLike" class="flex items-center space-x-1 text-purple-500 hover:text-purple-700 transition-colors duration-300">
+                        <i data-lucide="heart" class="w-5 h-5"></i>
+                        <span></span>
+                    </button>
+                    <button id="expandedPostShare" class="flex items-center space-x-1 text-blue-500 hover:text-blue-700 transition-colors duration-300">
+                        <i data-lucide="share-2" class="w-5 h-5"></i>
+                        <span>Chia sẻ</span>
+                    </button>
+                </div>
+            </div>
+            <div class="border-t pt-4">
+                <h4 class="text-lg font-semibold mb-2">Bình luận</h4>
+                <form id="commentForm" class="mb-4">
+                    <textarea id="commentContent" placeholder="Viết bình luận của bạn..." required
+                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300 min-h-[80px]"></textarea>
+                    <button type="submit" class="mt-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 transform hover:scale-105 hover:from-purple-600 hover:to-blue-600 shadow-md">
+                        Đăng bình luận
+                    </button>
+                </form>
+                <div id="commentsContainer"></div>
+            </div>
+        </div>
+    </div>
+
     <footer class="bg-white bg-opacity-80 backdrop-blur-md shadow-lg mt-8">
         <div class="container mx-auto px-4 py-6 text-center text-gray-600 flex items-center justify-center">
             <i data-lucide="copyright" class="w-4 h-4 mr-2"></i>
@@ -82,6 +142,13 @@
         const newPostForm = document.getElementById('newPostForm');
         const postForm = document.getElementById('postForm');
         const postsContainer = document.getElementById('postsContainer');
+        const expandedPostContainer = document.getElementById('expandedPostContainer');
+        const closeExpandedPost = document.getElementById('closeExpandedPost');
+        const expandedPostLike = document.getElementById('expandedPostLike');
+        const expandedPostShare = document.getElementById('expandedPostShare');
+        const commentForm = document.getElementById('commentForm');
+
+        let currentExpandedPost = null;
 
         newPostBtn.addEventListener('click', () => {
             newPostForm.classList.toggle('hidden');
@@ -136,35 +203,124 @@
         async function renderPosts() {
             const posts = await fetchPosts();
             postsContainer.innerHTML = posts.map((post, index) => `
-                <article class="bg-white rounded-lg shadow-xl p-6 transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl ${index % 2 === 0 ? 'clip-path-slant' : ''}">
+                <article class="bg-white rounded-lg shadow-xl p-6 transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl ${index % 2 === 0 ? 'clip-path-slant' : ''}" data-post-id="${post.id}">
                     <h3 class="text-xl font-semibold mb-2 text-gray-800 flex items-center">
                         <i data-lucide="user" class="w-5 h-5 mr-2 text-purple-500"></i>
                         ${post.name}
                     </h3>
-                    <p class="text-gray-600 mb-4">${post.content}</p>
+                    <p class="text-gray-600 mb-4">${post.content.length > 100 ? post.content.slice(0, 100) + '...' : post.content}</p>
                     <div class="flex justify-between items-center text-sm text-gray-500">
                         <span class="flex items-center">
                             <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
                             ${formatTime(new Date(post.date))}
                         </span>
-                        <button onclick="likePost('${post.id}')" class="flex items-center space-x-1 text-purple-500 hover:text-purple-700 transition-colors duration-300" aria-label="Thích bài viết">
-                            <i data-lucide="heart" class="w-5 h-5"></i>
-                            <span>${post.likes || 0}</span>
-                        </button>
+                        <div class="flex items-center space-x-4">
+                            <button onclick="likePost('${post.id}', event)" class="flex items-center space-x-1 text-purple-500 hover:text-purple-700 transition-colors duration-300" aria-label="Thích bài viết">
+                                <i data-lucide="heart" class="w-5 h-5"></i>
+                                <span>${post.likes || 0}</span>
+                            </button>
+                            <span class="flex items-center space-x-1 text-blue-500">
+                                <i data-lucide="message-square" class="w-5 h-5"></i>
+                                <span>${post.comments ? post.comments.length : 0}</span>
+                            </span>
+                        </div>
                     </div>
                 </article>
             `).join('');
             lucide.createIcons();
+            
+            document.querySelectorAll('#postsContainer > article').forEach(post => {
+                post.addEventListener('click', () => expandPost(post.dataset.postId));
+            });
         }
 
-        async function likePost(id) {
+        async function likePost(id, event) {
+            if (event) {
+                event.stopPropagation();
+            }
             const posts = await fetchPosts();
             const updatedPosts = posts.map(post =>
                 post.id === id ? { ...post, likes: (post.likes || 0) + 1 } : post
             );
             await savePosts(updatedPosts);
             await renderPosts();
+            if (currentExpandedPost && currentExpandedPost.id === id) {
+                expandPost(id);
+            }
         }
+
+        async function expandPost(postId) {
+            const posts = await fetchPosts();
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            currentExpandedPost = post;
+
+            document.getElementById('expandedPostTitle').textContent = post.name;
+            document.getElementById('expandedPostContent').textContent = post.content;
+            document.getElementById('expandedPostDate').innerHTML = `
+                <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+                ${formatTime(new Date(post.date))}
+            `;
+            document.getElementById('expandedPostLike').querySelector('span').textContent = post.likes || 0;
+            expandedPostContainer.classList.remove('hidden');
+
+            renderComments(post.comments || []);
+            lucide.createIcons();
+        }
+
+        function renderComments(comments) {
+            const commentsContainer = document.getElementById('commentsContainer');
+            commentsContainer.innerHTML = comments.map(comment => `
+                <div class="bg-gray-100 rounded-lg p-3 mb-2">
+                    <p class="text-gray-800">${comment.content}</p>
+                    <p class="text-xs text-gray-500 mt-1">${formatTime(new Date(comment.date))}</p>
+                </div>
+            `).join('');
+        }
+
+        closeExpandedPost.addEventListener('click', () => {
+            expandedPostContainer.classList.add('hidden');
+            currentExpandedPost = null;
+        });
+
+        expandedPostLike.addEventListener('click', async () => {
+            if (!currentExpandedPost) return;
+            await likePost(currentExpandedPost.id);
+            const posts = await fetchPosts();
+            const updatedPost = posts.find(p => p.id === currentExpandedPost.id);
+            expandedPostLike.querySelector('span').textContent = updatedPost.likes || 0;
+        });
+
+        expandedPostShare.addEventListener('click', () => {
+            if (!currentExpandedPost) return;
+            const postUrl = `${window.location.origin}${window.location.pathname}?post=${currentExpandedPost.id}`;
+            navigator.clipboard.writeText(postUrl).then(() => {
+                alert('Đường dẫn bài viết đã được sao chép vào clipboard!');
+            });
+        });
+
+        commentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentExpandedPost) return;
+
+            const commentContent = document.getElementById('commentContent').value;
+            const newComment = {
+                content: commentContent,
+                date: new Date().toISOString()
+            };
+
+            const posts = await fetchPosts();
+            const postIndex = posts.findIndex(p => p.id === currentExpandedPost.id);
+            if (postIndex === -1) return;
+
+            posts[postIndex].comments = posts[postIndex].comments || [];
+            posts[postIndex].comments.unshift(newComment);
+
+            await savePosts(posts);
+            renderComments(posts[postIndex].comments);
+            document.getElementById('commentContent').value = '';
+        });
 
         postForm.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -176,7 +332,8 @@
                 name,
                 content,
                 date: new Date().toISOString(),
-                likes: 0
+                likes: 0,
+                comments: []
             };
 
             const posts = await fetchPosts();
@@ -190,9 +347,15 @@
             lucide.createIcons();
         });
 
-        renderPosts();
+        window.addEventListener('load', async () => {
+            await renderPosts();
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('post');
+            if (postId) {
+                expandPost(postId);
+            }
+        });
 
-        // Lazy loading for posts
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -208,10 +371,8 @@
             });
         }
 
-        // Call observePosts after rendering posts
         renderPosts().then(observePosts);
 
-        // Initialize Lucide icons
         lucide.createIcons();
     </script>
 </body>
